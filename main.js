@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const TaskItem = ({ task, onDelete }) => {
   return (
@@ -47,7 +49,7 @@ const TaskInput = ({ onAddTask }) => {
   );
 };
 
-const TaskManagerApp = () => {
+const HomeScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
 
   const handleAddTask = (task) => {
@@ -63,7 +65,32 @@ const TaskManagerApp = () => {
       <Text style={styles.heading}>TaskMaster</Text>
       <TaskInput onAddTask={handleAddTask} />
       <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} />
+      <TouchableOpacity onPress={() => navigation.navigate('About')}>
+        <Text style={styles.aboutLink}>About</Text>
+      </TouchableOpacity>
     </View>
+  );
+};
+
+const AboutScreen = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>About TaskMaster</Text>
+      <Text>This app helps you manage your tasks and stay organized.</Text>
+    </View>
+  );
+};
+
+const Stack = createStackNavigator();
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="About" component={AboutScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
@@ -105,6 +132,11 @@ const styles = StyleSheet.create({
   deleteButton: {
     color: 'red',
   },
+  aboutLink: {
+    marginTop: 10,
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
 });
 
-export default TaskManagerApp;
+export default App;
